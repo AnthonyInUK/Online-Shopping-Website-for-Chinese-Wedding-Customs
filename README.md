@@ -153,6 +153,28 @@ The following files contain sensitive information and are **NOT** included in th
 
 3. **Never commit** these files to version control.
 
+## 🔄 Project Workflow
+
+This project follows a comprehensive workflow from user role selection to order completion. The following diagrams illustrate the complete system flow:
+
+### Workflow Overview
+![Workflow 0](frontend/angular-ecommerce/src/assets/images/workflow0.png)
+
+### User Role Selection & Product Display
+![Workflow 1](frontend/angular-ecommerce/src/assets/images/workflow1.png)
+
+### Shopping Cart & Product Management
+![Workflow 2](frontend/angular-ecommerce/src/assets/images/workflow2.png)
+
+### Checkout Process
+![Workflow 4](frontend/angular-ecommerce/src/assets/images/workflow4.png)
+
+### Order Processing & Payment
+![Workflow 5](frontend/angular-ecommerce/src/assets/images/workflow5.png)
+
+### Email Notifications & Order History
+![Workflow 6](frontend/angular-ecommerce/src/assets/images/workflow6.png)
+
 ## 📁 Project Structure
 
 ```
@@ -172,9 +194,13 @@ The following files contain sensitive information and are **NOT** included in th
 │       │   ├── services/               # Angular services
 │       │   └── common/                 # Shared models
 │       └── src/assets/
-│           └── images/wedding/         # Product images
-├── 01-starter-files/
-│   └── db-scripts/                     # Database migration scripts
+│           └── images/
+│               ├── wedding/            # Wedding product images
+│               └── workflow0-6.png     # Project workflow diagrams
+├── database-scripts/
+│   ├── 01-add-wedding-fields.sql      # Database schema updates
+│   ├── 02-update-categories-for-wedding.sql
+│   └── 04-wedding-products-from-images.sql
 └── README.md
 ```
 
