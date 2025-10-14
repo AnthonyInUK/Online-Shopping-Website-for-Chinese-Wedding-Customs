@@ -45,7 +45,7 @@ export class CheckoutComponent implements OnInit {
   isDisabled: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
-              private weddingShopFormService: Luv2ShopFormService,
+              private weddingShopFormService: WeddingShopFormService,
               private cartService: CartService,
               private checkoutService: CheckoutService,
               private router: Router) { }

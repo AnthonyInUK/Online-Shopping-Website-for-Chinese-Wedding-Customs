@@ -105,10 +105,12 @@ A full-stack e-commerce platform specialized in Chinese wedding supplies and cus
 4. **Frontend Setup**
    ```bash
    cd frontend/angular-ecommerce
-   npm install
+   npm install --legacy-peer-deps
    NODE_OPTIONS=--openssl-legacy-provider npm start
    ```
    Frontend will run on `http://localhost:4200`
+
+   **Note**: Use `--legacy-peer-deps` to resolve Angular version conflicts and `NODE_OPTIONS=--openssl-legacy-provider` for Node.js 18+ compatibility.
 
 ### 🎮 Usage
 
@@ -126,6 +128,73 @@ Use Stripe test card numbers:
 - **3D Secure**: `4000002500003155`
 
 Use any future expiry date, CVC, and billing information.
+
+## 🔧 Troubleshooting
+
+### Frontend Issues
+
+#### Node.js 18+ Compatibility Issues
+If you encounter errors like `Error: error:0308010C:digital envelope routines::unsupported`:
+
+```bash
+# Solution: Use legacy OpenSSL provider
+export NODE_OPTIONS=--openssl-legacy-provider
+npm start
+```
+
+#### Angular Version Conflicts
+If you see dependency resolution errors during `npm install`:
+
+```bash
+# Solution: Use legacy peer dependency resolution
+npm install --legacy-peer-deps
+```
+
+#### Blank Page / Angular Compilation Errors
+If the frontend loads but shows a blank page or Angular compilation fails:
+
+1. **Check for remaining luv2code references**:
+   ```bash
+   grep -r "Luv2Shop\|luv2code" frontend/angular-ecommerce/src/
+   ```
+
+2. **Clear node_modules and reinstall**:
+   ```bash
+   rm -rf node_modules package-lock.json
+   npm install --legacy-peer-deps
+   ```
+
+3. **Use the provided startup script**:
+   ```bash
+   ./start-frontend.sh
+   ```
+
+### Backend Issues
+
+#### Spring Boot Plugin Not Found
+If you see `No plugin found for prefix 'spring-boot'`:
+
+```bash
+# Solution: Run the jar directly
+cd backend/spring-boot-ecommerce
+java -jar target/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar
+```
+
+#### Database Connection Issues
+- Ensure MySQL is running on port 3306
+- Verify database credentials in `application.properties`
+- Check if database `full_stack_ecommerce` exists
+
+### Common Solutions
+
+1. **Restart services in order**:
+   - Stop all running processes
+   - Start backend first: `java -jar target/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar`
+   - Start frontend: `NODE_OPTIONS=--openssl-legacy-provider npm start`
+
+2. **Check port availability**:
+   - Backend: `http://localhost:8081/api/products`
+   - Frontend: `http://localhost:4200`
 
 ## 🔒 Security & Configuration
 
