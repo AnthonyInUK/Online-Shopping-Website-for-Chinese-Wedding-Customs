@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Luv2ShopFormService } from 'src/app/services/luv2-shop-form.service';
+import { WeddingShopFormService } from 'src/app/services/wedding-shop-form.service';
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
-import { Luv2ShopValidators } from 'src/app/validators/luv2-shop-validators';
+import { WeddingShopValidators } from 'src/app/validators/wedding-shop-validators';
 import { CartService } from 'src/app/services/cart.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { Router } from '@angular/router';
@@ -45,7 +45,7 @@ export class CheckoutComponent implements OnInit {
   isDisabled: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
-              private luv2ShopFormService: Luv2ShopFormService,
+              private weddingShopFormService: Luv2ShopFormService,
               private cartService: CartService,
               private checkoutService: CheckoutService,
               private router: Router) { }
@@ -65,41 +65,41 @@ export class CheckoutComponent implements OnInit {
         firstName: new FormControl('', 
                               [Validators.required, 
                                Validators.minLength(2), 
-                               Luv2ShopValidators.notOnlyWhitespace]),
+                               WeddingShopValidators.notOnlyWhitespace]),
 
         lastName:  new FormControl('', 
                               [Validators.required, 
                                Validators.minLength(2), 
-                               Luv2ShopValidators.notOnlyWhitespace]),
+                               WeddingShopValidators.notOnlyWhitespace]),
                                
         email: new FormControl(theEmail,
                               [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
       }),
       shippingAddress: this.formBuilder.group({
         street: new FormControl('', [Validators.required, Validators.minLength(2), 
-                                     Luv2ShopValidators.notOnlyWhitespace]),
+                                     WeddingShopValidators.notOnlyWhitespace]),
         city: new FormControl('', [Validators.required, Validators.minLength(2), 
-                                   Luv2ShopValidators.notOnlyWhitespace]),
+                                   WeddingShopValidators.notOnlyWhitespace]),
         state: new FormControl('', [Validators.required]),
         country: new FormControl('', [Validators.required]),
         zipCode: new FormControl('', [Validators.required, Validators.minLength(2), 
-                                      Luv2ShopValidators.notOnlyWhitespace])
+                                      WeddingShopValidators.notOnlyWhitespace])
       }),
       billingAddress: this.formBuilder.group({
         street: new FormControl('', [Validators.required, Validators.minLength(2), 
-                                     Luv2ShopValidators.notOnlyWhitespace]),
+                                     WeddingShopValidators.notOnlyWhitespace]),
         city: new FormControl('', [Validators.required, Validators.minLength(2), 
-                                   Luv2ShopValidators.notOnlyWhitespace]),
+                                   WeddingShopValidators.notOnlyWhitespace]),
         state: new FormControl('', [Validators.required]),
         country: new FormControl('', [Validators.required]),
         zipCode: new FormControl('', [Validators.required, Validators.minLength(2), 
-                                      Luv2ShopValidators.notOnlyWhitespace])
+                                      WeddingShopValidators.notOnlyWhitespace])
       }),
       creditCard: this.formBuilder.group({
         /*
         cardType: new FormControl('', [Validators.required]),
         nameOnCard:  new FormControl('', [Validators.required, Validators.minLength(2), 
-                                          Luv2ShopValidators.notOnlyWhitespace]),
+                                          WeddingShopValidators.notOnlyWhitespace]),
         cardNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]{16}')]),
         securityCode: new FormControl('', [Validators.required, Validators.pattern('[0-9]{3}')]),
         expirationMonth: [''],
@@ -114,7 +114,7 @@ export class CheckoutComponent implements OnInit {
     const startMonth: number = new Date().getMonth() + 1;
     console.log("startMonth: " + startMonth);
 
-    this.luv2ShopFormService.getCreditCardMonths(startMonth).subscribe(
+    this.weddingShopFormService.getCreditCardMonths(startMonth).subscribe(
       data => {
         console.log("Retrieved credit card months: " + JSON.stringify(data));
         this.creditCardMonths = data;
@@ -123,7 +123,7 @@ export class CheckoutComponent implements OnInit {
 
     // populate credit card years
 
-    this.luv2ShopFormService.getCreditCardYears().subscribe(
+    this.weddingShopFormService.getCreditCardYears().subscribe(
       data => {
         console.log("Retrieved credit card years: " + JSON.stringify(data));
         this.creditCardYears = data;
@@ -133,7 +133,7 @@ export class CheckoutComponent implements OnInit {
 
     // populate countries
 
-    this.luv2ShopFormService.getCountries().subscribe(
+    this.weddingShopFormService.getCountries().subscribe(
       data => {
         console.log("Retrieved countries: " + JSON.stringify(data));
         this.countries = data;
@@ -388,7 +388,7 @@ export class CheckoutComponent implements OnInit {
       startMonth = 1;
     }
 
-    this.luv2ShopFormService.getCreditCardMonths(startMonth).subscribe(
+    this.weddingShopFormService.getCreditCardMonths(startMonth).subscribe(
       data => {
         console.log("Retrieved credit card months: " + JSON.stringify(data));
         this.creditCardMonths = data;
@@ -407,7 +407,7 @@ export class CheckoutComponent implements OnInit {
     console.log(`${formGroupName} country code: ${countryCode}`);
     console.log(`${formGroupName} country name: ${countryName}`);
 
-    this.luv2ShopFormService.getStates(countryCode).subscribe(
+    this.weddingShopFormService.getStates(countryCode).subscribe(
       data => {
 
         if (formGroupName === 'shippingAddress') {

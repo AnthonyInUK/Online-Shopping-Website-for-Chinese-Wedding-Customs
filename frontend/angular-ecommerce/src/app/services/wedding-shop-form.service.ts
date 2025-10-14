@@ -9,10 +9,10 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class Luv2ShopFormService {
+export class WeddingShopFormService {
 
-  private countriesUrl = environment.luv2shopApiUrl + '/countries';
-  private statesUrl = environment.luv2shopApiUrl + '/states';
+  private countriesUrl = environment.weddingShopApiUrl + '/countries';
+  private statesUrl = environment.weddingShopApiUrl + '/states';
 
   constructor(private httpClient: HttpClient) { }
 

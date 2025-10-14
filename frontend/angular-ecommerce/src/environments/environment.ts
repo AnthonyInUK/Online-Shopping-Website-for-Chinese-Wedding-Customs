@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  luv2shopApiUrl: "http://localhost:8081/api",
+  weddingShopApiUrl: "http://localhost:8081/api",
   stripePublishableKey: "pk_test_51PTKpdP2S9PHCY4q1YLKjkExnl8G0pZzTe7NEngUCvBhWiFlNHgeYPwgRv1P6WqHWoXpAgWOgY0qfipc1iz2P5DR00zlyfqIhK"
 };
 
