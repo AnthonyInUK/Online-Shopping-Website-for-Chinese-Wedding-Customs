@@ -73,11 +73,16 @@ A full-stack e-commerce platform specialized in Chinese wedding supplies and cus
    CREATE DATABASE full_stack_ecommerce;
    
    # Run database scripts
-   cd 01-starter-files/db-scripts
+   cd database-scripts
    mysql -u root -p full_stack_ecommerce < 01-add-wedding-fields.sql
    mysql -u root -p full_stack_ecommerce < 02-update-categories-for-wedding.sql
    mysql -u root -p full_stack_ecommerce < 04-wedding-products-from-images.sql
    ```
+   
+   **What these scripts do:**
+   - `01-add-wedding-fields.sql`: Adds wedding-specific fields to the product table
+   - `02-update-categories-for-wedding.sql`: Creates wedding product categories
+   - `04-wedding-products-from-images.sql`: Populates products with wedding items
 
 3. **Backend Setup**
    ```bash

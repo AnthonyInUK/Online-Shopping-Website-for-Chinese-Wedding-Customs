@@ -88,3 +88,10 @@ logs/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Test documentation (not needed in repository)
+✅项目已成功启动.md
+启动成功.md
+婚庆系统改造完成.md
+数据库设置步骤.md
+SETUP-GUIDE.md
