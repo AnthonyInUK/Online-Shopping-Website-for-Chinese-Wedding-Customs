@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ecommerce-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: full-stack-ecommerce
+      MYSQL_USER: ecommerceapp
+      MYSQL_PASSWORD: ecommerceapp
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./01-starter-files/db-scripts:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+
+  backend:
+    build: 
+      context: ./02-backend/spring-boot-ecommerce
+      dockerfile: Dockerfile
+    container_name: ecommerce-backend
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/full-stack-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=ecommerceapp
+      - SPRING_DATASOURCE_PASSWORD=ecommerceapp
+      - STRIPE_KEY_SECRET=your-stripe-secret-key-here
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./03-frontend/angular-ecommerce
+      dockerfile: Dockerfile
+    container_name: ecommerce-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    environment:
+      - API_URL=http://backend:8081/api
+    restart: unless-stopped
+
+volumes:
+  mysql_data:

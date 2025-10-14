@@ -1,0 +1,25 @@
+<!-- 角色选择模态框 -->
+<div class="role-selector-overlay" *ngIf="showSelector">
+  <div class="role-selector-modal">
+    <h2>Welcome to Wedding Shop</h2>
+    <p class="subtitle">Please select who you are shopping for:</p>
+
+    <div class="role-options">
+      <div class="role-card groom-card" (click)="selectRole('GROOM')">
+        <div class="role-icon">🤵🏻‍♂️</div>
+        <h3>Groom</h3>
+        <p>新郎</p>
+        <p class="description">Shop for groom's wedding essentials</p>
+      </div>
+
+      <div class="role-card bride-card" (click)="selectRole('BRIDE')">
+        <div class="role-icon">👰🏻‍♀️</div>
+        <h3>Bride</h3>
+        <p>新娘</p>
+        <p class="description">Shop for bride's wedding essentials</p>
+      </div>
+    </div>
+
+    <p class="note">You can change this selection anytime from the menu</p>
+  </div>
+</div>
