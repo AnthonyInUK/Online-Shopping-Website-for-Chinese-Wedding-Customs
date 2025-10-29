@@ -26,10 +26,10 @@ jobs:
           --health-retries=3
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up JDK 11
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '11'
         distribution: 'temurin'
@@ -82,7 +82,7 @@ jobs:
     
     - name: Upload Test Reports
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: e2e-backend-reports
         path: backend/spring-boot-ecommerce/target/surefire-reports/
@@ -90,7 +90,7 @@ jobs:
     
     - name: Upload Screenshots
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: e2e-backend-screenshots
         path: backend/spring-boot-ecommerce/screenshots/
@@ -100,10 +100,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '14'
         cache: 'npm'
@@ -168,7 +168,7 @@ jobs:
     
     - name: Upload Test Reports
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: e2e-frontend-reports
         path: frontend/angular-ecommerce/e2e/reports/
