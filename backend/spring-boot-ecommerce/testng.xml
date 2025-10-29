@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="E2E Test Suite" parallel="tests" thread-count="2">
+    <test name="Role Selection Tests">
+        <classes>
+            <class name="com.luv2code.ecommerce.e2e.tests.RoleSelectionTest"/>
+        </classes>
+    </test>
+
+    <test name="Product Browsing Tests">
+        <classes>
+            <class name="com.luv2code.ecommerce.e2e.tests.ProductBrowsingTest"/>
+        </classes>
+    </test>
+
+    <test name="Cart Management Tests">
+        <classes>
+            <class name="com.luv2code.ecommerce.e2e.tests.CartManagementTest"/>
+        </classes>
+    </test>
+
+    <test name="Checkout Tests">
+        <classes>
+            <class name="com.luv2code.ecommerce.e2e.tests.CheckoutTest"/>
+        </classes>
+    </test>
+
+    <test name="Order History Tests">
+        <classes>
+            <class name="com.luv2code.ecommerce.e2e.tests.OrderHistoryTest"/>
+        </classes>
+    </test>
+</suite>
+

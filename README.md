@@ -290,13 +290,62 @@ Secure checkout with Stripe payment integration, showing order summary and payme
 ### Order Confirmation
 Order confirmation page with tracking number and order details.
 
+## 🧪 Testing
+
+### E2E Testing with Selenium
+
+This project includes comprehensive End-to-End (E2E) testing using Selenium WebDriver to ensure all critical user journeys work correctly.
+
+#### Quick Start
+
+```bash
+# Run backend E2E tests
+cd backend/spring-boot-ecommerce
+mvn test -Dbrowser=headless
+
+# Run frontend E2E tests
+cd frontend/angular-ecommerce
+npm run e2e
+```
+
+#### Test Scenarios Covered
+
+1. **Role Selection**: Groom/Bride role selection and navigation
+2. **Product Browsing**: Product display and filtering by role
+3. **Shopping Cart**: Add, update, and remove items
+4. **Checkout Process**: Complete checkout with Stripe test cards
+5. **Order Management**: Order history and tracking
+
+#### Running Tests Locally
+
+**Backend Tests (Java/Selenium)**:
+```bash
+cd backend/spring-boot-ecommerce
+mvn test -Dtest=RoleSelectionTest  # Run specific test
+mvn test -Dbrowser=headless         # Run all tests in headless mode
+```
+
+**Frontend Tests (Protractor)**:
+```bash
+cd frontend/angular-ecommerce
+npm start                            # Start frontend
+npm run e2e                          # Run E2E tests
+```
+
+#### CI/CD Integration
+
+Tests automatically run on every pull request and push to `main` or `develop` branches via GitHub Actions.
+
+For detailed testing documentation, see [SELENIUM_SETUP_GUIDE.md](SELENIUM_SETUP_GUIDE.md).
+
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+3. Write tests for your changes (E2E tests if applicable)
+4. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
 
 ## 📝 License
 
