@@ -44,27 +44,31 @@ jobs:
       working-directory: ./backend/spring-boot-ecommerce
       run: mvn clean install -DskipTests
     
-    - name: Start Backend
+    - name: Start Backend and Wait for Ready
       working-directory: ./backend/spring-boot-ecommerce
       run: |
+        # Start backend in background
         nohup mvn spring-boot:run > backend.log 2>&1 &
-        sleep 30
-        tail -n 50 backend.log
-    
-    - name: Wait for Backend to be Ready
-      run: |
-        for i in {1..30}; do
+        echo "Backend starting..."
+        
+        # Wait for backend to be ready
+        for i in {1..60}; do
           if curl -f http://localhost:8081/api/products > /dev/null 2>&1; then
             echo "Backend is ready!"
-            break
+            curl -s http://localhost:8081/api/products | head -n 20
+            exit 0
           fi
-          echo "Waiting for backend... ($i/30)"
+          echo "Waiting for backend... ($i/60)"
+          if [ $i -eq 30 ]; then
+            echo "Backend log after 60 seconds:"
+            tail -n 50 backend.log
+          fi
           sleep 2
         done
-    
-    - name: Verify Backend Health
-      run: |
-        curl -f http://localhost:8081/api/products || exit 1
+        
+        echo "Backend failed to start. Showing full log:"
+        cat backend.log
+        exit 1
     
     - name: Run E2E Tests
       env:
@@ -108,8 +112,6 @@ jobs:
     
     - name: Build Frontend
       working-directory: ./frontend/angular-ecommerce
-      env:
-        NODE_OPTIONS: --openssl-legacy-provider
       run: npm run build
     
     - name: Start MySQL Container
@@ -144,7 +146,6 @@ jobs:
     - name: Start Frontend
       working-directory: ./frontend/angular-ecommerce
       env:
-        NODE_OPTIONS: --openssl-legacy-provider
         CHROME_BIN: /usr/bin/google-chrome
       run: |
         npm start &
@@ -155,7 +156,6 @@ jobs:
       env:
         CHROME_BIN: /usr/bin/google-chrome
         CHROME_ARGS: --headless --disable-gpu --no-sandbox
-        NODE_OPTIONS: --openssl-legacy-provider
       run: |
         timeout 120 npm run e2e || true
     
