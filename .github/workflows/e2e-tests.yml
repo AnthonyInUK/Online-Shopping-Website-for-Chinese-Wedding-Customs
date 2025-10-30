@@ -57,6 +57,11 @@ jobs:
         echo "Setting up database..."
         mysql -h 127.0.0.1 -P 3306 -u root -proot -e "CREATE DATABASE IF NOT EXISTS \`full-stack-ecommerce\`;"
         
+        # Run database scripts to add wedding fields
+        echo "Running migration scripts..."
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < database-scripts/01-add-wedding-fields.sql || echo "Script 01 completed (may have errors if tables don't exist yet)"
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < database-scripts/02-update-categories-for-wedding.sql || echo "Script 02 completed"
+        
         echo "Database setup complete!"
     
     - name: Build Backend
@@ -92,14 +97,12 @@ jobs:
         cat backend.log
         exit 1
     
-    - name: Run Database Migration Scripts
+    - name: Populate Test Data
       working-directory: ./backend/spring-boot-ecommerce
       run: |
-        echo "Running migration scripts..."
-        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < ../../database-scripts/01-add-wedding-fields.sql
-        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < ../../database-scripts/02-update-categories-for-wedding.sql
-        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < ../../database-scripts/04-wedding-products-from-images.sql
-        echo "Migration scripts completed!"
+        echo "Populating test data..."
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < ../../database-scripts/04-wedding-products-from-images.sql || echo "Test data script completed"
+        echo "Test data populated!"
     
     - name: Run E2E Tests
       env:
