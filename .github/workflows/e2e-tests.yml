@@ -170,19 +170,13 @@ jobs:
         echo "Creating database..."
         docker exec mysql-test sh -c 'mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS \`full-stack-ecommerce\`;"'
         
-        # Run database scripts
-        echo "Running database scripts..."
-        docker exec -i mysql-test sh -c 'mysql -u root -proot full-stack-ecommerce' < database-scripts/01-add-wedding-fields.sql
-        docker exec -i mysql-test sh -c 'mysql -u root -proot full-stack-ecommerce' < database-scripts/02-update-categories-for-wedding.sql
-        docker exec -i mysql-test sh -c 'mysql -u root -proot full-stack-ecommerce' < database-scripts/04-wedding-products-from-images.sql
-        
-        echo "Database setup complete!"
+        echo "Database ready. Tables will be created by Spring Boot on startup."
     
     - name: Start Backend Container
       run: |
         cd backend/spring-boot-ecommerce
         docker build -t wedding-backend .
-        docker run --name wedding-backend -p 8081:8081 --link mysql-test:mysql -e SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/full_stack_ecommerce -e SPRING_DATASOURCE_USERNAME=root -e SPRING_DATASOURCE_PASSWORD=root -d wedding-backend
+        docker run --name wedding-backend -p 8081:8081 --link mysql-test:mysql -e SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/full-stack-ecommerce -e SPRING_DATASOURCE_USERNAME=root -e SPRING_DATASOURCE_PASSWORD=root -e SPRING_JPA_HIBERNATE_DDL_AUTO=update -e ALLOWED_ORIGINS=http://localhost:4200 -d wedding-backend
         sleep 45
     
     - name: Install Chrome for Protractor
