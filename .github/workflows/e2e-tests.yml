@@ -71,11 +71,8 @@ jobs:
     - name: Start Backend and Wait for Ready
       working-directory: ./backend/spring-boot-ecommerce
       run: |
-        # Copy CI configuration
-        cp ../../.github/workflows/ci-application.properties src/main/resources/application.properties
-        
-        # Start backend in background
-        nohup mvn spring-boot:run > backend.log 2>&1 &
+        # Start backend with CI configuration
+        nohup mvn spring-boot:run -Dspring-boot.run.arguments="--spring.config.location=classpath:/application-ci.properties" > backend.log 2>&1 &
         echo "Backend starting..."
         
         # Wait for backend to be ready
