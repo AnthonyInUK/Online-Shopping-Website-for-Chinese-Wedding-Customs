@@ -53,14 +53,9 @@ jobs:
           sleep 2
         done
         
-        # Create database and run scripts
+        # Create database
         echo "Setting up database..."
         mysql -h 127.0.0.1 -P 3306 -u root -proot -e "CREATE DATABASE IF NOT EXISTS \`full-stack-ecommerce\`;"
-        
-        # Run database scripts
-        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < database-scripts/01-add-wedding-fields.sql
-        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < database-scripts/02-update-categories-for-wedding.sql
-        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < database-scripts/04-wedding-products-from-images.sql
         
         echo "Database setup complete!"
     
@@ -96,6 +91,15 @@ jobs:
         echo "Backend failed to start. Showing full log:"
         cat backend.log
         exit 1
+    
+    - name: Run Database Migration Scripts
+      working-directory: ./backend/spring-boot-ecommerce
+      run: |
+        echo "Running migration scripts..."
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < ../../database-scripts/01-add-wedding-fields.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < ../../database-scripts/02-update-categories-for-wedding.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < ../../database-scripts/04-wedding-products-from-images.sql
+        echo "Migration scripts completed!"
     
     - name: Run E2E Tests
       env:
