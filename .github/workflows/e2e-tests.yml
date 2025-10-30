@@ -16,7 +16,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: full_stack_ecommerce
+          MYSQL_DATABASE: full-stack-ecommerce
         ports:
           - 3306:3306
         options: >-
@@ -35,10 +35,34 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     
-    - name: Install Chrome
+    - name: Install Chrome and MySQL Client
       run: |
         sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+        sudo apt-get install -y google-chrome-stable default-mysql-client
+    
+    - name: Setup Database
+      run: |
+        # Wait for MySQL service to be ready
+        echo "Waiting for MySQL service..."
+        for i in {1..30}; do
+          if mysql -h 127.0.0.1 -P 3306 -u root -proot -e "SELECT 1" > /dev/null 2>&1; then
+            echo "MySQL is ready!"
+            break
+          fi
+          echo "Waiting for MySQL service... ($i/30)"
+          sleep 2
+        done
+        
+        # Create database and run scripts
+        echo "Setting up database..."
+        mysql -h 127.0.0.1 -P 3306 -u root -proot -e "CREATE DATABASE IF NOT EXISTS \`full-stack-ecommerce\`;"
+        
+        # Run database scripts
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < database-scripts/01-add-wedding-fields.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < database-scripts/02-update-categories-for-wedding.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -proot full-stack-ecommerce < database-scripts/04-wedding-products-from-images.sql
+        
+        echo "Database setup complete!"
     
     - name: Build Backend
       working-directory: ./backend/spring-boot-ecommerce
@@ -47,6 +71,9 @@ jobs:
     - name: Start Backend and Wait for Ready
       working-directory: ./backend/spring-boot-ecommerce
       run: |
+        # Copy CI configuration
+        cp ../../.github/workflows/ci-application.properties src/main/resources/application.properties
+        
         # Start backend in background
         nohup mvn spring-boot:run > backend.log 2>&1 &
         echo "Backend starting..."
@@ -116,18 +143,33 @@ jobs:
     
     - name: Start MySQL Container
       run: |
-        docker run --name mysql-test -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=full_stack_ecommerce -p 3306:3306 -d mysql:8.0
+        docker run --name mysql-test -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=full-stack-ecommerce -p 3306:3306 -d mysql:8.0
         sleep 10
     
     - name: Run Database Setup
       run: |
         # Wait for MySQL to be ready
-        docker exec mysql-test sh -c 'while ! mysqladmin ping -h localhost --silent; do sleep 1; done'
+        echo "Waiting for MySQL..."
+        for i in {1..30}; do
+          if docker exec mysql-test sh -c 'mysqladmin ping -h localhost --silent'; then
+            echo "MySQL is ready!"
+            break
+          fi
+          echo "Waiting for MySQL... ($i/30)"
+          sleep 2
+        done
+        
+        # Create database if it doesn't exist (Docker might not auto-create it)
+        echo "Creating database..."
+        docker exec mysql-test sh -c 'mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS \`full-stack-ecommerce\`;"'
         
         # Run database scripts
-        mysql -h 127.0.0.1 -u root -proot full_stack_ecommerce < database-scripts/01-add-wedding-fields.sql
-        mysql -h 127.0.0.1 -u root -proot full_stack_ecommerce < database-scripts/02-update-categories-for-wedding.sql
-        mysql -h 127.0.0.1 -u root -proot full_stack_ecommerce < database-scripts/04-wedding-products-from-images.sql
+        echo "Running database scripts..."
+        docker exec -i mysql-test sh -c 'mysql -u root -proot full-stack-ecommerce' < database-scripts/01-add-wedding-fields.sql
+        docker exec -i mysql-test sh -c 'mysql -u root -proot full-stack-ecommerce' < database-scripts/02-update-categories-for-wedding.sql
+        docker exec -i mysql-test sh -c 'mysql -u root -proot full-stack-ecommerce' < database-scripts/04-wedding-products-from-images.sql
+        
+        echo "Database setup complete!"
     
     - name: Start Backend Container
       run: |
